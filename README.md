@@ -1,5 +1,5 @@
 # 简介
-EasyExcel提供了Excel导入导出，Word根据模板生成，根据Table母版生成，从空白创建等功能。
+EasyOffice提供了Excel导入导出，Word根据模板生成，根据Table母版生成，从空白创建等功能。
 绝大部分Excel、Word导入导出工作只需要通过配置就可以轻松解决。
 
 # 依赖注入
