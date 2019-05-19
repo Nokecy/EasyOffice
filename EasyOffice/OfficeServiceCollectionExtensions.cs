@@ -10,6 +10,8 @@ using EasyOffice.Solutions.Repositories;
 using Bayantu.Extensions.Persistence;
 using Bayantu.Extensions.Persistence.Dapper;
 using Bayantu.Extensions.Session;
+using Microsoft.Extensions.DependencyInjection;
+using EasyOffice.Interfaces;
 
 namespace Bayantu.Extensions.DependencyInjection
 {
@@ -18,6 +20,31 @@ namespace Bayantu.Extensions.DependencyInjection
     /// </summary>
     public static class OfficeServiceCollectionExtensions
     {
+
+        public static void AddOffice(this IServiceCollection services, OfficeOptions options)
+        {
+            services.AddTransient<IExcelImportService,ExcelImportService>();
+            services.AddTransient<IExcelExportService,ExcelExportService>();
+            services.AddTransient<IExcelImportSolutionService,ExcelImportSolutionService>();
+            services.AddTransient<IWordExportService,WordExportService>();
+
+            //根据配置项动态注入Provider
+            if (options.ExcelImportSolution == SolutionEnum.NPOI)
+            {
+                services.AddTransient<IExcelImportProvider,ExcelImportProvider>();
+            }
+
+            if (options.ExcelExportSolution == SolutionEnum.NPOI)
+            {
+                services.AddTransient<IExcelExportProvider,ExcelExportProvider>();
+            }
+
+            if (options.WordExportSolution == SolutionEnum.NPOI)
+            {
+                services.AddTransient<IWordExportProvider,WordExportProvider>();
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -74,14 +101,6 @@ namespace Bayantu.Extensions.DependencyInjection
             {
                 builder.RegisterType<WordExportProvider>().AsImplementedInterfaces();
             }
-
-            const string serviceName = "Office";
-
-            builder.Register(c => new ImportErrorLogRepository(c.Resolve<OfficeDbContext>(), c.Resolve<IEvosSession>(), c.ResolveNamed<IDapperAsyncExecutor>($"{serviceName}_IDapperAsyncExecutor")))
-                .As<IImportErrorLogRepository>();
-
-            //Session
-            builder.AddEvosSession();
         }
     }
 }

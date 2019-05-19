@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace UnitTests.DependencyInjection
 {
-    public static class DependencyContainer
+    public static class DependencyContainerAutofac
     {
         /// <summary>
         /// 容器
@@ -17,7 +17,7 @@ namespace UnitTests.DependencyInjection
         /// <summary>
         /// 构造函数进行容器注册
         /// </summary>
-        static DependencyContainer()
+        static DependencyContainerAutofac()
         {
             var builder = new ContainerBuilder();
 
