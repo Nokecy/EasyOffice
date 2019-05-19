@@ -1,16 +1,13 @@
 # 简介
-Bayantu.Extensions.Office基础库提供了Excel导入导出，Word根据模板生成，根据Table母版生成，从空白创建等功能。
+EasyOffice提供了Excel导入导出，Word根据模板生成，根据Table母版生成，从空白创建等功能。
+绝大部分Excel、Word导入导出工作只需要通过配置就可以轻松解决。
 
 # 依赖注入
 使用Autofac注入
 
 ```c
 // 注入Office基础服务
-builder.AddOffice(new OfficeOptions()
-{
-    DatabaseConnectionString = Configuration.GetConnectionString("MysqlDatabase"),
-    RedisConnectionString = Configuration.GetValue<string>("CacheOptions:RedisConfiguration")
-});
+builder.AddOffice(new OfficeOptions());
 ```
 
 ---
