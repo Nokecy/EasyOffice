@@ -13,11 +13,11 @@ EasyOffice底层库目前使用NPOI,因此是完全免费的。
 。
 
 # 依赖注入
-使用Autofac注入
+支持.net core自带依赖注入或者使用Autofac注入
 
 ```c
 // 注入Office基础服务
-builder.AddOffice(new OfficeOptions());
+services.AddOffice(new OfficeOptions());
 ```
 
 ---
