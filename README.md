@@ -1,5 +1,5 @@
 # 近期更新安排
-- 1、支持word,ppt转PDF（依赖第三方工具）
+- 1、支持docx转PDF
 - 2、Excel导入支持fluentvalidation,支持多条件判断
 - 3、Excel导出支持列级别、单元格级别设置样式
 
