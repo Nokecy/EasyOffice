@@ -21,14 +21,14 @@
   
     <ItemGroup>
       <PackageReference Include="Autofac" Version="4.9.1" />
-      <PackageReference Include="Bayantu.Extensions.Persistence" Version="1.3.1.6" />
-      <PackageReference Include="Bayantu.Extensions.Session" Version="1.0.0.7" />
       <PackageReference Include="DotNetCore.NPOI" Version="1.2.1" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Solutions\Factories\" />
+      <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+        <HintPath>..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.dependencyinjection.abstractions\2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

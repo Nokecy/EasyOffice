@@ -1,17 +1,10 @@
-using System;
 using Autofac;
-using Bayantu.Extensions.Cache;
 using EasyOffice.Enums;
+using EasyOffice.Interfaces;
 using EasyOffice.Providers.NPOI;
 using EasyOffice.Services;
-using EasyOffice.Solutions;
-using EasyOffice.Solutions.DbContexts;
-using EasyOffice.Solutions.Repositories;
-using Bayantu.Extensions.Persistence;
-using Bayantu.Extensions.Persistence.Dapper;
-using Bayantu.Extensions.Session;
 using Microsoft.Extensions.DependencyInjection;
-using EasyOffice.Interfaces;
+using System;
 
 namespace Bayantu.Extensions.DependencyInjection
 {
@@ -25,7 +18,6 @@ namespace Bayantu.Extensions.DependencyInjection
         {
             services.AddTransient<IExcelImportService,ExcelImportService>();
             services.AddTransient<IExcelExportService,ExcelExportService>();
-            services.AddTransient<IExcelImportSolutionService,ExcelImportSolutionService>();
             services.AddTransient<IWordExportService,WordExportService>();
 
             //根据配置项动态注入Provider
@@ -83,7 +75,6 @@ namespace Bayantu.Extensions.DependencyInjection
         {
             builder.RegisterType<ExcelImportService>().AsImplementedInterfaces();
             builder.RegisterType<ExcelExportService>().AsImplementedInterfaces();
-            builder.RegisterType<ExcelImportSolutionService>().AsImplementedInterfaces();
             builder.RegisterType<WordExportService>().AsImplementedInterfaces();
 
             //根据配置项动态注入Provider
