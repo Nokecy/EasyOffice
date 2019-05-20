@@ -1,10 +1,6 @@
-﻿using Autofac;
-using Bayantu.Extensions.DependencyInjection;
-using EasyOffice;
+﻿using Bayantu.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using System;
-using System.Reflection;
 
 namespace UnitTests.DependencyInjection
 {
