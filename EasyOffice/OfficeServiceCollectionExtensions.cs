@@ -5,7 +5,7 @@ using EasyOffice.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Bayantu.Extensions.DependencyInjection
+namespace EasyOffice
 {
     /// <summary>
     /// Office基础库依赖注入

@@ -1,6 +1,6 @@
 using EasyOffice.Enums;
 
-namespace Bayantu.Extensions.DependencyInjection
+namespace EasyOffice
 {
     /// <summary>
     /// 配置参数

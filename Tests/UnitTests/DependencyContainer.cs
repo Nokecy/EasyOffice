@@ -1,6 +1,6 @@
-﻿using Bayantu.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using EasyOffice;
 
 namespace UnitTests.DependencyInjection
 {
