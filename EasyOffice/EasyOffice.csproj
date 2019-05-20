@@ -3,23 +3,8 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
     </PropertyGroup>
-  
-    <PropertyGroup>
-      <TargetFramework>netcoreapp2.2</TargetFramework>
-      <AssemblyName>Bayantu.Extensions.Office</AssemblyName>
-      <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
-      <Product>Bayantu.Extensions.Office</Product>
-      <Description>八彦图Office基础库</Description>
-      <PackageId>Bayantu.Extensions.Office</PackageId>
-      <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-      <PackageReleaseNotes>Excel导入导出，以及与前端控件配套的解决方案服务，Word生成</PackageReleaseNotes>
-      <Version>1.0.1.2</Version>
-      <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-      <Company>All</Company>
-      <Authors>gongyingtao</Authors>
-    </PropertyGroup>
-  
-    <ItemGroup>
+
+  <ItemGroup>
       <PackageReference Include="DotNetCore.NPOI" Version="1.2.1" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     </ItemGroup>
