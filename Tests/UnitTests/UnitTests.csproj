@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\EasyOffice\EasyOffice.csproj" />
+      <ProjectReference Include="..\..\EasyOffice.Extensions\EasyOffice.Extensions.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -34,6 +35,15 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="Resources\CarWordTemplate.docx">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\Convert\table.docx">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\Convert\text.docx">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="Resources\Convert\textAndPicture.docx">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="Resources\gn.jpg">

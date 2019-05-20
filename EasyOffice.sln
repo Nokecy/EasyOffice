@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTests", "Tests\I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyOffice", "EasyOffice\EasyOffice.csproj", "{B5B6D702-0C6F-4904-8C60-DDB684AB3BFD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyOffice.Extensions", "EasyOffice.Extensions\EasyOffice.Extensions.csproj", "{3411D1E7-7C99-481E-B501-5E84243977F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{B5B6D702-0C6F-4904-8C60-DDB684AB3BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5B6D702-0C6F-4904-8C60-DDB684AB3BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5B6D702-0C6F-4904-8C60-DDB684AB3BFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3411D1E7-7C99-481E-B501-5E84243977F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3411D1E7-7C99-481E-B501-5E84243977F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3411D1E7-7C99-481E-B501-5E84243977F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3411D1E7-7C99-481E-B501-5E84243977F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

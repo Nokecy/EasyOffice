@@ -13,12 +13,12 @@ namespace EasyOffice
     public static class OfficeServiceCollectionExtensions
     {
 
-        public static void AddOffice(this IServiceCollection services)
+        public static void AddEasyOffice(this IServiceCollection services)
         {
-            services.AddOffice(new OfficeOptions());
+            services.AddEasyOffice(new OfficeOptions());
         }
 
-        public static void AddOffice(this IServiceCollection services, OfficeOptions options)
+        public static void AddEasyOffice(this IServiceCollection services, OfficeOptions options)
         {
             services.AddTransient<IExcelImportService, ExcelImportService>();
             services.AddTransient<IExcelExportService, ExcelExportService>();

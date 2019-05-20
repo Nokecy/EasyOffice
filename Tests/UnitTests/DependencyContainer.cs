@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using EasyOffice;
+using EasyOffice.Extensions;
 
 namespace UnitTests.DependencyInjection
 {
@@ -18,7 +19,9 @@ namespace UnitTests.DependencyInjection
         {
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddOffice(new OfficeOptions());
+            serviceCollection.AddEasyOffice(new OfficeOptions());
+
+            serviceCollection.AddEasyOfficeExtensions();
 
             _serviceProvider = serviceCollection.BuildServiceProvider();
         }
