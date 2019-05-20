@@ -18,7 +18,7 @@ namespace UnitTests.Services
         private readonly IWordExportService _wordExportService;
         public WordExportServiceTest()
         {
-            _wordExportService = _wordExportService.ResolveByServiceCollection();
+            _wordExportService = _wordExportService.Resolve();
         }
 
         [Fact]

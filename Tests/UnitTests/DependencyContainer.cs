@@ -33,7 +33,7 @@ namespace UnitTests.DependencyInjection
         /// <typeparam name="TComponent"></typeparam>
         /// <param name="component"></param>
         /// <returns></returns>
-        public static TComponent ResolveByServiceCollection<TComponent>(this TComponent component)
+        public static TComponent Resolve<TComponent>(this TComponent component)
         {
             return _serviceProvider.GetRequiredService<TComponent>();
         }

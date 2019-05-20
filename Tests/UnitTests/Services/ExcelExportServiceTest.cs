@@ -17,7 +17,7 @@ namespace UnitTests.Services
         private readonly IExcelExportService _excelExportService;
         public ExcelExportServiceTest()
         {
-            _excelExportService = _excelExportService.ResolveByServiceCollection();
+            _excelExportService = _excelExportService.Resolve();
         }
 
         [Fact]

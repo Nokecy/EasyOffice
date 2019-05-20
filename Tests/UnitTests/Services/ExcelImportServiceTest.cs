@@ -17,7 +17,7 @@ namespace UnitTests.Services
         private static List<ExcelDataRow> _rows;
         public ExcelImportServiceTest()
         {
-            _excelImportService = _excelImportService.ResolveByServiceCollection();
+            _excelImportService = _excelImportService.Resolve();
 
             string curDir = Environment.CurrentDirectory;
             string fileUrl = Path.Combine(curDir, "Resources", "CarImport.xlsx");
