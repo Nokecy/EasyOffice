@@ -17,7 +17,7 @@ EasyOffice底层库目前使用NPOI,因此是完全免费的。
 
 ```c
 // 注入Office基础服务
-services.AddOffice(new OfficeOptions());
+services.AddEasyOffice(new OfficeOptions());
 ```
 
 ---
@@ -460,6 +460,22 @@ File.WriteAllBytes(@"c:\file.docx", word.WordBytes);
 
             File.WriteAllBytes(fileUrl, word.WordBytes);
         }
+```
+
+#  扩展功能 - Extensions
+## IWordConverter Word转换器
+支持docx文件转换为html，或者pdf。底层库使用OpenXml和DinkToPdf，开源免费。如果你们公司没有Aspose.Word的Lisence，这是个可以考虑的选择。
+
+
+```
+step1: Startup注入
+serviceCollection.AddEasyOfficeExtensions();
+
+step2:
+构造函数注入IWordConverter _wordConverter
+
+step3:调用
+var pdfBytes = _wordConverter.ConvertToPDF(docxBytes, "text");
 ```
 
 
