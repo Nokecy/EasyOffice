@@ -47,7 +47,7 @@ namespace EasyOffice.Extension.Converter.Converters
                 {
                     GlobalSettings = {
                     ColorMode = DinkToPdf.ColorMode.Color,
-                    Orientation = Orientation.Landscape,
+                    Orientation = Orientation.Portrait,
                     PaperSize = PaperKind.A4Plus,
                 },
                 Objects =

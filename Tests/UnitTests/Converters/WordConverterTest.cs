@@ -47,7 +47,8 @@ namespace UnitTests.Converters
         public void ConvertToPDF_表格文字图片转换PDF_手动观察导出效果()
         {
             string curDir = Environment.CurrentDirectory;
-            string fileUrl = Path.Combine(curDir, "Resources/Convert/table.docx");
+        
+            string fileUrl = Path.Combine(curDir, @"C:\学习资料\通知中心概述.docx");
             var bytes = File.ReadAllBytes(fileUrl);
             var result = _wordConverter.ConvertToPDF(bytes, "text");
 
