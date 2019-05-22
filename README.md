@@ -12,6 +12,21 @@ EasyOffice底层库目前使用NPOI,因此是完全免费的。
 通过IExcelImportProvider等Provider接口实现了底层库与实现的解耦，后期如果需要切换比如Excel导入的基础库为EPPlus，只需要提供IExcelImportProvider接口的EPPlus实现，并且修改依赖注入代码即可。
 。
 
+# Nuget
+
+```
+//核心包
+Install-Package EasyOffice
+
+//如果需要使用转PDF功能
+Install-Package EasyOffice.Extensions
+```
+==IMPORTANT==
+
+如果通过nuget使用EasyOffice.Extensions,需要手动将libwkhtmltox.dll，libwkhtmltox.so
+这两个文件手动拷贝到自己的项目根目录下，即与csproj项目工程文件同级，不然会报错。
+
+
 # 依赖注入
 支持.net core自带依赖注入
 
