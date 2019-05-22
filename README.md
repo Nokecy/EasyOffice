@@ -18,7 +18,7 @@ EasyOffice底层库目前使用NPOI,因此是完全免费的。
 //核心包
 Install-Package EasyOffice
 
-//如果需要使用转PDF功能
+//如果需要使用转PDF功能，不需要转PDF的不要加这个包，比较大
 Install-Package EasyOffice.Extensions
 ```
 ==IMPORTANT==
