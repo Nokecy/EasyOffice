@@ -153,13 +153,35 @@ services.AddEasyOffice(new OfficeOptions());
     {
         Data = list,
         DataRowStartIndex = 1, //数据行起始索引，默认1
-        ExcelType = Bayantu.Extensions.Office.Enums.ExcelTypeEnum.XLS,//导出Excel类型，默认xls
+        ExportType = XLSX, 默认导出Excel类型，默认xlsx
         HeaderRowIndex = 0, //表头行索引，默认0
         SheetName = "sheet1" //页签名称，默认sheet1
     });
 
     File.WriteAllBytes(@"c:\test.xls", bytes);
 ```
+
+### 性能测试
+通过ExcelOption中的ExportType参数，可以调整导出类型。
+默认正常XLSX导出
+XLS:可导出XLS
+FastXLSX: 快速导出XLSX，无样式
+CSV: 导出CSV文件
+
+**100万**条数据,每行10列,无任何样式
+- XLSX:0:02:12.287
+- FastXLSX: 0:01:05.309
+- CSV: 0:00:08.692
+
+**10万**条数据,每行10列,无任何样式
+- XLSX: 0:00:13.228
+- FastXLSX: 0:00:07.011
+- CSV:  0:00:01.069
+
+**1万**条数据,每行10列,无任何样式
+- XLSX: 0:00:02.062
+- FastXLSX: 0:00:00.923
+- CSV:  0:00:00.302
 ---
 
 # IWordExportService - Word通用导出服务
