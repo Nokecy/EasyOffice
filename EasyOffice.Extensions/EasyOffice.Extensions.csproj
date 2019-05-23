@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description />
+    <FileVersion>1.0.2.0</FileVersion>
+    <PackageReleaseNotes>nuget包包含依赖文件</PackageReleaseNotes>
+    <Version>1.0.2</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CoreCompat.System.Drawing.v2" Version="5.2.0-preview1-r131" />
@@ -21,5 +27,16 @@
     <None Update="libwkhtmltox.so">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <_PackageFiles Include="$(OutputPath)\libwkhtmltox.dll">
+      <BuildAction>None</BuildAction>
+      <PackagePath>libwkhtmltox.dll</PackagePath>
+    </_PackageFiles>
+    <_PackageFiles Include="$(OutputPath)\libwkhtmltox.so">
+      <BuildAction>None</BuildAction>
+      <PackagePath>libwkhtmltox.so</PackagePath>
+    </_PackageFiles>
   </ItemGroup>
 </Project>

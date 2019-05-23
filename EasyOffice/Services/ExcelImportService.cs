@@ -19,7 +19,11 @@ namespace EasyOffice.Services
             _excelImportProvider = excelImportProvider;
         }
 
-        public Task<DataTable> ToTableAsync<T>(string fileUrl, int sheetIndex = 0, int headerRowIndex = 0, int dataRowIndex = 1, int dataRowCount = -1)
+        public Task<DataTable> ToTableAsync<T>(string fileUrl
+            , int sheetIndex = 0
+            , int headerRowIndex = 0
+            , int dataRowIndex = 1
+            , int dataRowCount = -1)
             where T : class, new()
         {
             if (string.IsNullOrWhiteSpace(fileUrl))
@@ -157,11 +161,19 @@ namespace EasyOffice.Services
         private ExcelData GetExcelData<T>(ImportOption importOption)
             where T : class, new()
         {
-            return _excelImportProvider.Convert<T>(
+            return importOption.CustomExcelImportProvider == null ? 
+               _excelImportProvider.Convert<T>(
                  importOption.FileUrl
                , importOption.SheetIndex
                , importOption.HeaderRowIndex
-               , importOption.DataRowStartIndex);
+               , importOption.DataRowStartIndex
+               ) :
+               importOption.CustomExcelImportProvider.Convert<T>(
+                 importOption.FileUrl
+               , importOption.SheetIndex
+               , importOption.HeaderRowIndex
+               , importOption.DataRowStartIndex
+               );
         }
     }
 }

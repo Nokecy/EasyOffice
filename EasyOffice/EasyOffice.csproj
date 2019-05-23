@@ -2,6 +2,14 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <Version>1.0.2</Version>
+        <Description>a .net core library to easily manipulate excel,word etc.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/holdengong/EasyOffice</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/holdengong/EasyOffice</RepositoryUrl>
+        <PackageReleaseNotes>support remote import from url</PackageReleaseNotes>
     </PropertyGroup>
 
   <ItemGroup>

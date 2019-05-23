@@ -1,4 +1,5 @@
 ﻿using EasyOffice.Enums;
+using EasyOffice.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -32,5 +33,10 @@ namespace EasyOffice.Models.Excel
         /// 数据行起始索引，默认为1
         /// </summary>
         public int DataRowStartIndex { get; set; } = 1;
+
+        /// <summary>
+        /// 自定义Excel导出Provider
+        /// </summary>
+        public IExcelExportProvider CustomExcelExportProvider { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EasyOffice.Enums;
+using EasyOffice.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,5 +17,10 @@ namespace EasyOffice.Models.Excel
         /// 校验模式
         /// </summary>
         public ValidateModeEnum ValidateMode { get; set; } = ValidateModeEnum.StopOnFirstFailure;
+
+        /// <summary>
+        /// 自定义导入Provider
+        /// </summary>
+        public IExcelImportProvider CustomExcelImportProvider { get; set; }
     }
 }

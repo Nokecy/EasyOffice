@@ -15,35 +15,45 @@ namespace EasyOffice.Services
             _wordExportProvider = wordExportProvider;
         }
 
-        public Task<Word> CreateWordAsync(IEnumerable<IWordElement> elements)
+        public Task<Word> CreateWordAsync(IEnumerable<IWordElement> elements,IWordExportProvider customWordExportProvider=null)
         {
-            var word = _wordExportProvider.CreateWord();
+            var provider = customWordExportProvider == null ? _wordExportProvider : customWordExportProvider;
+
+            var word = provider.CreateWord();
 
             elements?.ToList().ForEach(x =>
             {
                 if (x is Paragraph)
                 {
-                    word = _wordExportProvider.InsertParagraphs(word, new List<Paragraph>() { x as Paragraph });
+                    word = provider.InsertParagraphs(word, new List<Paragraph>() { x as Paragraph });
                 }
 
                 if (x is Table)
                 {
-                    word = _wordExportProvider.InsertTables(word, new List<Table>() { x as Table });
+                    word = provider.InsertTables(word, new List<Table>() { x as Table });
                 }
             });
 
             return Task.FromResult(word);
         }
 
-        public Task<Word> CreateFromTemplateAsync<T>(string templateUrl, T wordData) where T : class, new()
+        public Task<Word> CreateFromTemplateAsync<T>(string templateUrl
+            , T wordData
+            , IWordExportProvider customWordExportProvider = null) 
+        where T : class, new()
         {
+            var provider = customWordExportProvider == null ? _wordExportProvider : customWordExportProvider;
+
             var word = _wordExportProvider.ExportFromTemplate(templateUrl, wordData);
             return Task.FromResult(word);
         }
 
-        public Task<Word> CreateFromMasterTableAsync<T>(string templateUrl, IEnumerable<T> datas)
+        public Task<Word> CreateFromMasterTableAsync<T>(string templateUrl
+            , IEnumerable<T> datas
+            , IWordExportProvider customWordExportProvider = null)
             where T : class, new()
         {
+            var provider = customWordExportProvider == null ? _wordExportProvider : customWordExportProvider;
             var word = _wordExportProvider.CreateFromMasterTable(templateUrl, datas);
             return Task.FromResult(word);
         }

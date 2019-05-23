@@ -20,7 +20,9 @@ namespace EasyOffice.Services
         public Task<byte[]> ExportAsync<T>(ExportOption<T> exportOption)
             where T : class, new()
         {
-            var workbookBytes = _excelExportProvider.Export(exportOption);
+            var provider = exportOption.CustomExcelExportProvider == null ? _excelExportProvider : _excelExportProvider;
+
+            var workbookBytes = provider.Export(exportOption);
 
             //设置样式
             workbookBytes = Decorate(workbookBytes, exportOption);
@@ -32,6 +34,8 @@ namespace EasyOffice.Services
         private byte[] Decorate<T>(byte[] workbookBytes, ExportOption<T> exportOption)
               where T : class, new()
         {
+            var provider = exportOption.CustomExcelExportProvider == null ? _excelExportProvider : _excelExportProvider;
+
             DecoratorContext context = new DecoratorContext()
             {
                 TypeDecoratorInfo = TypeDecoratorInfoFactory.CreateInstance(typeof(T))
@@ -39,7 +43,7 @@ namespace EasyOffice.Services
 
             GetDecorators<T>().ForEach(d =>
             {
-                workbookBytes = d.Decorate(workbookBytes, exportOption, context, _excelExportProvider);
+                workbookBytes = d.Decorate(workbookBytes, exportOption, context, provider);
             });
 
             return workbookBytes;
