@@ -4,15 +4,16 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <Version>1.0.2</Version>
+        <Version>1.0.3</Version>
         <Description>a .net core library to easily manipulate excel,word etc.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/holdengong/EasyOffice</PackageProjectUrl>
         <RepositoryUrl>https://github.com/holdengong/EasyOffice</RepositoryUrl>
-        <PackageReleaseNotes>support remote import from url</PackageReleaseNotes>
+        <PackageReleaseNotes>提升Excel导出性能</PackageReleaseNotes>
     </PropertyGroup>
 
   <ItemGroup>
+      <PackageReference Include="CsvHelper" Version="12.1.2" />
       <PackageReference Include="DocumentFormat.OpenXml" Version="2.9.1" />
       <PackageReference Include="DotNetCore.NPOI" Version="1.2.1" />
       <PackageReference Include="FluentValidation" Version="8.4.0" />

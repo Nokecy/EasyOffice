@@ -3,6 +3,7 @@ using EasyOffice.Decorators;
 using EasyOffice.Factories;
 using EasyOffice.Interfaces;
 using EasyOffice.Models.Excel;
+using EasyOffice.Providers.NPOI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,22 @@ namespace EasyOffice.Services
         public Task<byte[]> ExportAsync<T>(ExportOption<T> exportOption)
             where T : class, new()
         {
-            var provider = exportOption.CustomExcelExportProvider == null ? _excelExportProvider : exportOption.CustomExcelExportProvider;
+            var provider = _excelExportProvider;
+
+            switch (exportOption.ExportType)
+            {
+                case Enums.ExportType.FastXLSX:
+                    provider = new OpenXmlExcelExportProvider();
+                    break;
+                case Enums.ExportType.CSV:
+                    provider = new CSVExcelExportProvider();
+                    break;
+            }
+
+            if (exportOption.CustomExcelExportProvider != null)
+            {
+                provider = exportOption.CustomExcelExportProvider;
+            }
 
             //if (exportOption.ExcelType == Enums.ExcelTypeEnum.XLS
             //    && exportOption.Data.Count > 65535)

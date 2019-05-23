@@ -25,7 +25,7 @@ namespace EasyOffice.Providers.NPOI
             where T : class, new()
         {
             IWorkbook workbook = null;
-            if (exportOption.ExcelType == ExcelTypeEnum.XLS)
+            if (exportOption.ExportType == ExportType.XLS)
             {
                 workbook = new HSSFWorkbook();
             }

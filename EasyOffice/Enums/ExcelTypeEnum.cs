@@ -4,9 +4,11 @@ using System.Text;
 
 namespace EasyOffice.Enums
 {
-    public enum ExcelTypeEnum
+    public enum ExportType
     {
         XLS,
-        XLSX
+        XLSX,
+        FastXLSX,
+        CSV
     }
 }

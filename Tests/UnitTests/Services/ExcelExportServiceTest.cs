@@ -52,6 +52,8 @@ namespace UnitTests.Services
             File.WriteAllBytes(fileUrl, bytes);
         }
 
+        public const int dataCount = 10000;
+
         [Fact]
         public async Task ExportTest_NPOI最大条数性能测试_性能测试()
         {
@@ -62,7 +64,7 @@ namespace UnitTests.Services
 
             var list = new List<PerformanceTest>();
 
-            for (int i = 0; i < 100000; i++)
+            for (int i = 0; i < dataCount; i++)
             {
                 list.Add(performance);
             }
@@ -85,7 +87,7 @@ namespace UnitTests.Services
 
             var list = new List<PerformanceTest>();
 
-            for (int i = 0; i < 100000; i++)
+            for (int i = 0; i < dataCount; i++)
             {
                 list.Add(performance);
             }
@@ -93,7 +95,31 @@ namespace UnitTests.Services
             var bytes = await _excelExportService.ExportAsync(new ExportOption<PerformanceTest>()
             {
                 Data = list,
-                CustomExcelExportProvider = new OpenXmlExcelExportProvider()
+                ExportType = EasyOffice.Enums.ExportType.FastXLSX
+            });
+
+            File.WriteAllBytes(fileUrl, bytes);
+        }
+
+        [Fact]
+        public async Task ExportTest_CSV最大条数性能测试_性能测试()
+        {
+            string curDir = Environment.CurrentDirectory;
+            string fileUrl = Path.Combine(curDir, DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv");
+
+            var performance = new PerformanceTest();
+
+            var list = new List<PerformanceTest>();
+
+            for (int i = 0; i < dataCount; i++)
+            {
+                list.Add(performance);
+            }
+
+            var bytes = await _excelExportService.ExportAsync(new ExportOption<PerformanceTest>()
+            {
+                Data = list,
+                ExportType = EasyOffice.Enums.ExportType.CSV
             });
 
             File.WriteAllBytes(fileUrl, bytes);

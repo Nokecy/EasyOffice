@@ -168,7 +168,7 @@ namespace EasyOffice.Extension.Converter.Converters
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return "The file is either open, please close it or contains corrupt data";
             }

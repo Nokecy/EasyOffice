@@ -1,16 +1,20 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using EasyOffice.Decorators;
 using EasyOffice.Factories;
+using EasyOffice.Helpers.Reflection;
 using EasyOffice.Interfaces;
 using EasyOffice.Models.Excel;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EasyOffice.Providers.NPOI
 {
@@ -65,14 +69,13 @@ namespace EasyOffice.Providers.NPOI
             return dt;
         }
 
-        private byte[] Export<T>(IEnumerable<T> data, Dictionary<string, string> headerDict)
+        private byte[] Export<T>(IEnumerable<T> datas, Dictionary<string, string> headerDict)
             where T : class, new()
         {
             byte[] result = null;
             var ms = new MemoryStream();
             var fileUrl = Path.Combine(Environment.CurrentDirectory, DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".xlsx");
             using (var workbook = SpreadsheetDocument.Create(fileUrl, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook)
-                //(destination, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook)
                 )
             {
                 var type = typeof(T);
@@ -80,68 +83,107 @@ namespace EasyOffice.Providers.NPOI
 
                 var workbookPart = workbook.AddWorkbookPart();
 
-                workbook.WorkbookPart.Workbook = new DocumentFormat.OpenXml.Spreadsheet.Workbook();
+                workbook.WorkbookPart.Workbook = new Workbook();
 
-                workbook.WorkbookPart.Workbook.Sheets = new DocumentFormat.OpenXml.Spreadsheet.Sheets();
+                workbook.WorkbookPart.Workbook.Sheets = new Sheets();
 
 
                 var sheetPart = workbook.WorkbookPart.AddNewPart<WorksheetPart>();
-                var sheetData = new DocumentFormat.OpenXml.Spreadsheet.SheetData();
-                sheetPart.Worksheet = new DocumentFormat.OpenXml.Spreadsheet.Worksheet(sheetData);
+                var sheetData = new SheetData();
+                sheetPart.Worksheet = new Worksheet(sheetData);
 
-                DocumentFormat.OpenXml.Spreadsheet.Sheets sheets = workbook.WorkbookPart.Workbook.GetFirstChild<DocumentFormat.OpenXml.Spreadsheet.Sheets>();
+                Sheets sheets = workbook.WorkbookPart.Workbook.GetFirstChild<Sheets>();
                 string relationshipId = workbook.WorkbookPart.GetIdOfPart(sheetPart);
 
                 uint sheetId = 1;
-                if (sheets.Elements<DocumentFormat.OpenXml.Spreadsheet.Sheet>().Count() > 0)
+                if (sheets.Elements<Sheet>().Count() > 0)
                 {
                     sheetId =
-                        sheets.Elements<DocumentFormat.OpenXml.Spreadsheet.Sheet>().Select(s => s.SheetId.Value).Max() + 1;
+                        sheets.Elements<Sheet>().Select(s => s.SheetId.Value).Max() + 1;
                 }
 
-                DocumentFormat.OpenXml.Spreadsheet.Sheet sheet = new DocumentFormat.OpenXml.Spreadsheet.Sheet() { Id = relationshipId, SheetId = sheetId, Name = "sheet1" };
+                Sheet sheet = new Sheet() { Id = relationshipId, SheetId = sheetId, Name = "sheet1" };
                 sheets.Append(sheet);
 
-                DocumentFormat.OpenXml.Spreadsheet.Row headerRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
+                Row headerRow = new Row();
 
-                List<String> columns = new List<string>();
+                List<string> columns = new List<string>();
                 foreach (var kvp in headerDict)
                 {
                     columns.Add(kvp.Value);
 
-                    DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-                    cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-                    cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(kvp.Value);
+                    Cell cell = new Cell();
+                    cell.DataType = CellValues.String;
+                    cell.CellValue = new CellValue(kvp.Value);
                     headerRow.AppendChild(cell);
                 }
 
                 sheetData.AppendChild(headerRow);
 
-                foreach (var dto in data)
+                foreach (var item in datas)
                 {
-                    DocumentFormat.OpenXml.Spreadsheet.Row newRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
-                    foreach (String col in columns)
+                    Row newRow = new Row();
+                    foreach (string col in columns)
                     {
-                        DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-                        cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
+                        Cell cell = new Cell();
+                        cell.DataType = CellValues.String;
 
                         var propName = headerDict.FirstOrDefault(x => x.Value == col).Key;
 
                         var prop = props.FirstOrDefault(x => x.Name == propName);
 
-                        cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(
-                            prop.GetValue(dto).ToString()
-                            ); //
+                        cell.CellValue = new CellValue(
+                            prop.FastGetValue2(item).ToString()
+                        );
+
                         newRow.AppendChild(cell);
                     }
-
                     sheetData.AppendChild(newRow);
                 }
+
+                //var options = new ParallelOptions()
+                //{
+                //    MaxDegreeOfParallelism = 8,
+                //};
+
+                //ConcurrentBag<Row> rows = new ConcurrentBag<Row>();
+
+                //Parallel.ForEach(datas, options,data => {
+                //    Row newRow = new Row();
+                //    foreach (string col in columns)
+                //    {
+                //        Cell cell = new Cell();
+                //        cell.DataType = CellValues.String;
+
+                //        var propName = headerDict.FirstOrDefault(x => x.Value == col).Key;
+
+                //        var prop = props.FirstOrDefault(x => x.Name == propName);
+
+                //        cell.CellValue = new CellValue(
+                //            col
+                //        );
+
+                //        newRow.AppendChild(cell);
+                //    }
+
+                //    rows.Add(newRow);
+                //});
+                //sheetData.Append(rows);
             }
 
             result = File.ReadAllBytes(fileUrl);
 
-            File.Delete(fileUrl);
+            try
+            {
+                var tf = new TaskFactory();
+                tf.StartNew(() =>
+                {
+                    File.Delete(fileUrl);
+                });
+            }
+            catch
+            {
+            }
 
             return result;
         }
