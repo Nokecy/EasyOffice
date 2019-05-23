@@ -160,45 +160,7 @@ services.AddEasyOffice(new OfficeOptions());
 
     File.WriteAllBytes(@"c:\test.xls", bytes);
 ```
-
-
 ---
-
-# IExcelImportSolutionService - Excel导入解决方案服务(与前端控件配套的完整解决方案)
-
-首先定义模板类，参考通用Excel导入
-
-```
-   //获取默认导入模板
-    var templateBytes = await _excelImportSolutionService.GetImportTemplateAsync<DemoTemplateDTO>();
-
-    //获取导入配置
-    var importConfig = await _excelImportSolutionService.GetImportConfigAsync<DemoTemplateDTO>("uploadUrl","templateUrl");
-
-    //获取预览数据
-    var previewData = await _excelImportSolutionService.GetFileHeadersAndRowsAsync<DemoTemplateDTO>("fileUrl");
-
-    //导入
-    var importOption = new ImportOption()
-    {
-        FileUrl = "fileUrl",
-        ValidateMode = ValidateModeEnum.Continue
-    };
-    object importSetData = new object(); //前端传过来的映射数据
-    var importResult = await _excelImportSolutionService.ImportAsync<DemoTemplateDTO>
-        (importOption
-        , importSetData
-        , BusinessAction //业务方法委托
-        , CustomValidate //自定义校验委托
-        );
-
-    //获取导入错误消息
-    var errorMsg = await _excelImportSolutionService.ExportErrorMsgAsync(importResult.Tag);
-```
-
-
----
-
 
 # IWordExportService - Word通用导出服务
 ## CreateFromTemplateAsync - 根据模板生成Word
