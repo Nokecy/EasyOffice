@@ -1,4 +1,4 @@
-[DinkToPDF](https://github.com/holdengong/EasyOffice/wiki/README-English)
+[English](https://github.com/holdengong/EasyOffice/wiki/README-English)
 
 # 简介
 Excel和Word操作在开发过程中经常需要使用，这类工作不涉及到核心业务，但又往往不可缺少。以往的开发方式在业务代码中直接引入NPOI、Aspose或者其他第三方库，工作繁琐，耗时多，扩展性差——比如基础库由NPOI修改为EPPlus，意味着业务代码需要全部修改。由于工作需要，我在之前版本的基础上，封装了OfficeService，目的是最大化节省导入导出这种非核心功能开发时间，专注于业务实现，并且业务端与底层基础组件完全解耦，即业务端完全不需要知道底层使用的是什么基础库，使得重构代价大大降低。
