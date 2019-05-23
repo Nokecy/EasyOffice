@@ -99,7 +99,7 @@ namespace EasyOffice.Providers.NPOI
         public static ExcelDataRow Convert<TTemplate>(IRow row, ExcelHeaderRow headerRow)
         {
             Type type = typeof(TTemplate);
-
+            var props = type.GetProperties().ToList();
             ExcelDataRow dataRow = new ExcelDataRow()
             {
                 DataCols = new List<ExcelDataCol>(),
@@ -125,9 +125,17 @@ namespace EasyOffice.Providers.NPOI
 
                 if (Table[key] == null)
                 {
-                    propertyName = type.GetProperties().ToList().FirstOrDefault(p => p.IsDefined(typeof(ColNameAttribute), false)
-                && p.GetCustomAttribute<ColNameAttribute>()?.ColName == colName
-                )?.Name;
+                    //优先匹配ColName特性值
+                    var matchProperty = props.FirstOrDefault(p => p.GetCustomAttribute<ColNameAttribute>()?.ColName == colName);
+
+                    if (matchProperty == null)
+                    {
+                        //次之匹配属性名
+                        matchProperty = props.FirstOrDefault(p => p.Name.Equals(colName,StringComparison.CurrentCultureIgnoreCase));
+                    }
+
+                    propertyName = matchProperty?.Name;
+
                     Table[key] = propertyName;
                 }
 

@@ -17,7 +17,7 @@ namespace EasyOffice.Models.Excel
         /// <summary>
         /// 导出Excel类型
         /// </summary>
-        public ExcelTypeEnum ExcelType { get; set; } = ExcelTypeEnum.XLS;
+        public ExcelTypeEnum ExcelType { get; set; } = ExcelTypeEnum.XLSX;
 
         /// <summary>
         /// 页签名称

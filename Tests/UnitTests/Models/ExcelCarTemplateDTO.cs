@@ -7,15 +7,15 @@ using System.Text;
 
 namespace UnitTests.Models
 {
-    [Header(Color = ColorEnum.BRIGHT_GREEN, FontSize = 22, IsBold = true)]
-    [WrapText]
+    //[Header(Color = ColorEnum.BRIGHT_GREEN, FontSize = 22, IsBold = true)]
+    //[WrapText]
     public class ExcelCarTemplateDTO
     {
         [ColName("车牌号")]
         [Required]
         [Regex(RegexConstant.CAR_CODE_REGEX)]
         [Duplication]
-        [MergeCols]
+        //[MergeCols]
         public string CarCode { get; set; }
 
         [ColName("手机号")]

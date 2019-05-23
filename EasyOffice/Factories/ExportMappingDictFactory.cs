@@ -34,6 +34,10 @@ namespace EasyOffice.Factories
                 {
                     dict.Add(p.Name, p.GetCustomAttribute<ColNameAttribute>().ColName);
                 }
+                else
+                {
+                    dict.Add(p.Name, p.Name);
+                }
             });
 
             Table[key] = dict;

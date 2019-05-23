@@ -1,5 +1,6 @@
 ﻿using EasyOffice.Interfaces;
 using EasyOffice.Models.Excel;
+using EasyOffice.Providers.NPOI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,6 +49,53 @@ namespace UnitTests.Services
             {
                 Data = list
             });
+            File.WriteAllBytes(fileUrl, bytes);
+        }
+
+        [Fact]
+        public async Task ExportTest_NPOI最大条数性能测试_性能测试()
+        {
+            string curDir = Environment.CurrentDirectory;
+            string fileUrl = Path.Combine(curDir, DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx");
+
+            var performance = new PerformanceTest();
+
+            var list = new List<PerformanceTest>();
+
+            for (int i = 0; i < 100000; i++)
+            {
+                list.Add(performance);
+            }
+
+            var bytes = await _excelExportService.ExportAsync(new ExportOption<PerformanceTest>()
+            {
+                Data = list
+            });
+
+            File.WriteAllBytes(fileUrl, bytes);
+        }
+
+        [Fact]
+        public async Task ExportTest_OpenXml最大条数性能测试_性能测试()
+        {
+            string curDir = Environment.CurrentDirectory;
+            string fileUrl = Path.Combine(curDir, DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx");
+
+            var performance = new PerformanceTest();
+
+            var list = new List<PerformanceTest>();
+
+            for (int i = 0; i < 100000; i++)
+            {
+                list.Add(performance);
+            }
+
+            var bytes = await _excelExportService.ExportAsync(new ExportOption<PerformanceTest>()
+            {
+                Data = list,
+                CustomExcelExportProvider = new OpenXmlExcelExportProvider()
+            });
+
             File.WriteAllBytes(fileUrl, bytes);
         }
 

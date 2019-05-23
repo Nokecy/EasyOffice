@@ -149,20 +149,20 @@ namespace EasyOffice.Models.Excel
         /// <typeparam name="T"></typeparam>
         /// <param name="row"></param>
         /// <returns></returns>
-        private static T Convert<T>(this ExcelDataRow row, Func<ExcelDataRow, Type, string, object> func)
-        {
-            Type t = typeof(T);
-            object o = Activator.CreateInstance(t);
-            t.GetProperties().ToList().ForEach(p =>
-            {
-                if (p.IsDefined(typeof(ColNameAttribute)))
-                {
-                    p.SetValue(o, func(row, p.PropertyType, p.GetCustomAttribute<ColNameAttribute>().ColName));
-                }
-            });
+        //private static T Convert<T>(this ExcelDataRow row, Func<ExcelDataRow, Type, string, object> func)
+        //{
+        //    Type t = typeof(T);
+        //    object o = Activator.CreateInstance(t);
+        //    t.GetProperties().ToList().ForEach(p =>
+        //    {
+        //        if (p.IsDefined(typeof(ColNameAttribute)))
+        //        {
+        //            p.SetValue(o, func(row, p.PropertyType, p.GetCustomAttribute<ColNameAttribute>().ColName));
+        //        }
+        //    });
 
-            return (T)o;
-        }
+        //    return (T)o;
+        //}
 
         /// <summary>
         /// 利用反射将ExcelDataRow转换为制定类型，性能较差
