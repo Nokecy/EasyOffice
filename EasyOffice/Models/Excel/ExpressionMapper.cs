@@ -44,9 +44,9 @@ namespace EasyOffice.Models.Excel
             {
                 List<MemberBinding> memberBindingList = new List<MemberBinding>();
 
-                MethodInfo singleOrDefaultMethod = typeof(Enumerable)
+                MethodInfo firstOrDefaultMethod = typeof(Enumerable)
                                                             .GetMethods()
-                                                            .Single(m => m.Name == "SingleOrDefault" && m.GetParameters().Count() == 2)
+                                                            .Single(m => m.Name == "FirstOrDefault" && m.GetParameters().Count() == 2)
                                                             .MakeGenericMethod(new[] { typeof(ExcelDataCol) });
 
                 foreach (var prop in typeof(T).GetProperties())
@@ -60,8 +60,8 @@ namespace EasyOffice.Models.Excel
                             Expression.Call(changeTypeMethod
                                 , Expression.Property(
                                     Expression.Call(
-                                          singleOrDefaultMethod
-                                        , Expression.Constant(dataRow.DataCols)
+                                          firstOrDefaultMethod
+                                        , Expression.Variable(typeof(IEnumerable<ExcelDataCol>))
                                         , lambdaExpr)
                                         , typeof(ExcelDataCol), "ColValue"), Expression.Constant(prop.PropertyType))
                                     , prop.PropertyType);
@@ -78,9 +78,10 @@ namespace EasyOffice.Models.Excel
                 Func<ExcelDataRow, T> func = lambda.Compile();//拼装是一次性的
                 Table[key] = func;
             }
-            var ss = (Func<ExcelDataRow, T>)Table[key];
 
-            return ((Func<ExcelDataRow, T>)Table[key]).Invoke(dataRow);
+            var result = ((Func<ExcelDataRow, T>)Table[key]).Invoke(dataRow);
+
+            return result;
         }
 
         public static object ChangeType(string stringValue, Type type)

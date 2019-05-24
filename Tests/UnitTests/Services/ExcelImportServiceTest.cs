@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using UnitTests.DependencyInjection;
 using UnitTests.Models;
+using UnitTests.Models.bugs;
 using Xunit;
 
 namespace UnitTests.Services
@@ -115,6 +117,48 @@ namespace UnitTests.Services
                 && dto.RegisterDate == new DateTime(2018, 1, 1)
                 && dto.Age == 18);
         }
+
+        [Fact]
+        public void FastConvert_有效数据转换_转换正确()
+        {
+           
+        }
+
+        [Fact]
+        public async Task ConvertTest_Convert转换数据_数据准确()
+        {
+            string curDir = Environment.CurrentDirectory;
+            string fileUrl = Path.Combine(curDir, "Resources/bugs", "issue6.xlsx");
+
+            var rows = await _excelImportService.ValidateAsync<Issue6>(new ImportOption()
+            {
+                FileUrl = fileUrl
+            });
+
+            var data = rows.Convert<Issue6>().ToList();
+
+            Assert.Equal(2, data.Count);
+            Assert.Equal("name1", data[0].Name);
+            Assert.Equal("name2", data[1].Name);
+        }
+
+        //[Fact]
+        //public async Task FastConvertTest_Convert转换数据_数据准确()
+        //{
+        //    string curDir = Environment.CurrentDirectory;
+        //    string fileUrl = Path.Combine(curDir, "Resources/bugs", "issue6.xlsx");
+
+        //    var rows = await _excelImportService.ValidateAsync<Issue6>(new ImportOption()
+        //    {
+        //        FileUrl = fileUrl
+        //    });
+
+        //    var data = rows.FastConvert<Issue6>().ToList();
+
+        //    Assert.Equal(2, data.Count);
+        //    Assert.Equal("name1",data[0].Name);
+        //    Assert.Equal("name2", data[1].Name);
+        //}
 
         public void Dispose()
         {
