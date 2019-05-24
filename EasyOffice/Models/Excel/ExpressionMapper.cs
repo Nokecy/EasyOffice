@@ -14,7 +14,7 @@ namespace EasyOffice.Models.Excel
     /// <summary>
     /// 生成表达式目录树 缓存
     /// </summary>
-    public class ExpressionMapper
+    public static class ExpressionMapper
     {
         private static Hashtable Table = Hashtable.Synchronized(new Hashtable(1024));
 
@@ -24,7 +24,7 @@ namespace EasyOffice.Models.Excel
         /// <typeparam name="T"></typeparam>
         /// <param name="dataRow"></param>
         /// <returns></returns>
-        public static T FastConvert<T>(ExcelDataRow dataRow)
+        public static T FastConvert<T>(ExcelDataRow dataRow, Func<List<ExcelDataCol>, T> func)
         {
             //利用表达式树，动态生成委托并缓存，得到接近于硬编码的性能
             //最终生成的代码近似于(假设T为Person类)
@@ -34,54 +34,60 @@ namespace EasyOffice.Models.Excel
             //          Age = Convert(ChangeType(dataRow.DataCols.SingleOrDefault(c=>c.PropertyName == prop.Name).ColValue,prop.PropertyType),prop.ProertyType)
             //      }
             // }
+            return func.Invoke(dataRow.DataCols);
+        }
 
-            string propertyNames = string.Empty;
-            dataRow.DataCols.ForEach(c => propertyNames += c.PropertyName + "_");
-            var key = typeof(T).FullName + "_" + propertyNames.Trim('_');
-
-
+        public static Func<List<ExcelDataCol>, T> GetLambda<T>(string key,IEnumerable<PropertyInfo> props)
+        {
             if (!Table.ContainsKey(key))
             {
+                Expression<Func<IEnumerable<FieldInfo>, Func<FieldInfo, bool>, FieldInfo>> singleOrDefaultExpr = (l, p) => l.SingleOrDefault(p);
+
                 List<MemberBinding> memberBindingList = new List<MemberBinding>();
 
+                //得到FirstOrDefault方法
                 MethodInfo firstOrDefaultMethod = typeof(Enumerable)
                                                             .GetMethods()
                                                             .Single(m => m.Name == "FirstOrDefault" && m.GetParameters().Count() == 2)
                                                             .MakeGenericMethod(new[] { typeof(ExcelDataCol) });
 
-                foreach (var prop in typeof(T).GetProperties())
+
+                var dataColsParam = Expression.Parameter(typeof(List<ExcelDataCol>), "dataCols");
+
+                foreach (var prop in props)
                 {
-                    Expression<Func<ExcelDataCol, bool>> lambdaExpr = c => c.PropertyName == prop.Name;
+                    //lambda表达式： PropertyName=prop.Name
+                    Expression<Func<ExcelDataCol, bool>> propertyEqualExpr = c => c.PropertyName == prop.Name;
 
                     MethodInfo changeTypeMethod = typeof(ExpressionMapper).GetMethods().Where(m => m.Name == "ChangeType").First();
 
-                    Expression expr =
-                        Expression.Convert(
-                            Expression.Call(changeTypeMethod
-                                , Expression.Property(
-                                    Expression.Call(
-                                          firstOrDefaultMethod
-                                        , Expression.Variable(typeof(IEnumerable<ExcelDataCol>))
-                                        , lambdaExpr)
-                                        , typeof(ExcelDataCol), "ColValue"), Expression.Constant(prop.PropertyType))
-                                    , prop.PropertyType);
+                    var firstOrDefaultMethodExpr = Expression.Call(firstOrDefaultMethod, dataColsParam, propertyEqualExpr);
+
+                    var propTypeConst = Expression.Constant(prop.PropertyType);
+
+                    var colValueExpr = Expression.Property(firstOrDefaultMethodExpr, typeof(ExcelDataCol), "ColValue");
+
+                    var changeTypeExpr = Expression.Call(changeTypeMethod, colValueExpr, propTypeConst);
+
+                    Expression expr = Expression.Convert(changeTypeExpr, prop.PropertyType);
 
                     memberBindingList.Add(Expression.Bind(prop, expr));
                 }
 
                 MemberInitExpression memberInitExpression = Expression.MemberInit(Expression.New(typeof(T)), memberBindingList.ToArray());
-                Expression<Func<ExcelDataRow, T>> lambda = Expression.Lambda<Func<ExcelDataRow, T>>(memberInitExpression, new ParameterExpression[]
+
+                var blockExpr = Expression.Block(memberInitExpression);
+
+                Expression<Func<List<ExcelDataCol>, T>> lambda = Expression.Lambda<Func<List<ExcelDataCol>, T>>(blockExpr, new ParameterExpression[]
                 {
-                    Expression.Parameter(typeof(ExcelDataRow), "p")
+                  dataColsParam
                 });
 
-                Func<ExcelDataRow, T> func = lambda.Compile();//拼装是一次性的
+                Func<List<ExcelDataCol>, T> func = lambda.Compile();//拼装是一次性的
                 Table[key] = func;
             }
 
-            var result = ((Func<ExcelDataRow, T>)Table[key]).Invoke(dataRow);
-
-            return result;
+            return (Func<List<ExcelDataCol>, T>)Table[key];
         }
 
         public static object ChangeType(string stringValue, Type type)

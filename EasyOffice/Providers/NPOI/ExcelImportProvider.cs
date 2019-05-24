@@ -34,7 +34,9 @@ namespace EasyOffice.Providers.NPOI
             List<ExcelDataRow> dataRows = new List<ExcelDataRow>();
             for (int i = dataRowStartIndex; i < sheet.PhysicalNumberOfRows; i++)
             {
-                dataRows.Add(Convert<TTemplate>(sheet.GetRow(i), headerRow));
+                var row = sheet.GetRow(i);
+                if (row == null || !row.Cells.Any(x => !string.IsNullOrWhiteSpace(x?.GetStringValue()))) continue;
+                dataRows.Add(Convert<TTemplate>(row, headerRow));
             }
 
             return new ExcelData()

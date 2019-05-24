@@ -108,7 +108,7 @@ namespace UnitTests.Services
             var row9 = _rows[9];
             Assert.True(row9.IsValid);
 
-            ExcelCarTemplateDTO dto = row9.FastConvert<ExcelCarTemplateDTO>();
+            ExcelCarTemplateDTO dto = row9.Convert<ExcelCarTemplateDTO>();
 
             Assert.True(dto.CarCode == "鄂A57MG2"
                 && dto.Gender == GenderEnum.男
@@ -116,12 +116,6 @@ namespace UnitTests.Services
                 && dto.Name == "龚英韬"
                 && dto.RegisterDate == new DateTime(2018, 1, 1)
                 && dto.Age == 18);
-        }
-
-        [Fact]
-        public void FastConvert_有效数据转换_转换正确()
-        {
-           
         }
 
         [Fact]
@@ -142,23 +136,79 @@ namespace UnitTests.Services
             Assert.Equal("name2", data[1].Name);
         }
 
-        //[Fact]
-        //public async Task FastConvertTest_Convert转换数据_数据准确()
-        //{
-        //    string curDir = Environment.CurrentDirectory;
-        //    string fileUrl = Path.Combine(curDir, "Resources/bugs", "issue6.xlsx");
+        [Fact]
+        public void FastConvert_性能测试_n条()
+        {
+            var rows = DataLib.GetExcelDataRows(5000, 10);
 
-        //    var rows = await _excelImportService.ValidateAsync<Issue6>(new ImportOption()
-        //    {
-        //        FileUrl = fileUrl
-        //    });
+            var result = rows.FastConvert<PerformanceTest>().ToList();
 
-        //    var data = rows.FastConvert<Issue6>().ToList();
+            for (int i = 0; i < result.Count; i++)
+            {
+                Assert.Equal($"r{i + 1}c1", result[i].p1);
+                Assert.Equal($"r{i + 1}c2", result[i].p2);
+                Assert.Equal($"r{i + 1}c3", result[i].p3);
+                Assert.Equal($"r{i + 1}c4", result[i].p4);
+                Assert.Equal($"r{i + 1}c5", result[i].p5);
+                Assert.Equal($"r{i + 1}c6", result[i].p6);
+                Assert.Equal($"r{i + 1}c7", result[i].p7);
+                Assert.Equal($"r{i + 1}c8", result[i].p8);
+                Assert.Equal($"r{i + 1}c9", result[i].p9);
+                Assert.Equal($"r{i + 1}c10", result[i].p10);
+            }
+        }
 
-        //    Assert.Equal(2, data.Count);
-        //    Assert.Equal("name1",data[0].Name);
-        //    Assert.Equal("name2", data[1].Name);
-        //}
+        [Fact]
+        public void Convert_性能测试_n条()
+        {
+            var rows = DataLib.GetExcelDataRows(5000, 10);
+
+            var result = rows.Convert<PerformanceTest>().ToList();
+
+            for (int i = 0; i < result.Count; i++)
+            {
+                Assert.Equal($"r{i + 1}c1", result[i].p1);
+                Assert.Equal($"r{i + 1}c2", result[i].p2);
+                Assert.Equal($"r{i + 1}c3", result[i].p3);
+                Assert.Equal($"r{i + 1}c4", result[i].p4);
+                Assert.Equal($"r{i + 1}c5", result[i].p5);
+                Assert.Equal($"r{i + 1}c6", result[i].p6);
+                Assert.Equal($"r{i + 1}c7", result[i].p7);
+                Assert.Equal($"r{i + 1}c8", result[i].p8);
+                Assert.Equal($"r{i + 1}c9", result[i].p9);
+                Assert.Equal($"r{i + 1}c10", result[i].p10);
+            }
+        }
+
+        [Fact]
+        public async Task FastConvertTest_Convert转换数据_数据准确()
+        {
+            string curDir = Environment.CurrentDirectory;
+            string fileUrl = Path.Combine(curDir, "Resources/bugs", "issue6.xlsx");
+
+            var rows = await _excelImportService.ValidateAsync<Issue6>(new ImportOption()
+            {
+                FileUrl = fileUrl
+            });
+
+            var data = rows.FastConvert<Issue6>().ToList();
+
+            Assert.Equal(2, data.Count);
+            Assert.Equal("name1", data[0].Name);
+            Assert.Equal("name2", data[1].Name);
+        }
+
+        [Fact]
+        public async Task Issue3_行数读取错误导致row为null错误()
+        {
+            string curDir = Environment.CurrentDirectory;
+            string fileUrl = Path.Combine(curDir, "Resources/bugs", "issue3.xlsx");
+
+            var rows = await _excelImportService.ValidateAsync<PerformanceTest>(new ImportOption()
+            {
+                FileUrl = fileUrl
+            });
+        }
 
         public void Dispose()
         {
