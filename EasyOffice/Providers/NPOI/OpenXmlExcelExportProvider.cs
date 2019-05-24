@@ -2,18 +2,15 @@
 using DocumentFormat.OpenXml.Spreadsheet;
 using EasyOffice.Decorators;
 using EasyOffice.Factories;
-using EasyOffice.Helpers.Reflection;
 using EasyOffice.Interfaces;
 using EasyOffice.Models.Excel;
 using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EasyOffice.Providers.NPOI
@@ -133,7 +130,7 @@ namespace EasyOffice.Providers.NPOI
                         var prop = props.FirstOrDefault(x => x.Name == propName);
 
                         cell.CellValue = new CellValue(
-                            prop.FastGetValue2(item).ToString()
+                            prop.GetValue(item).ToString()
                         );
 
                         newRow.AppendChild(cell);

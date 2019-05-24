@@ -1,12 +1,13 @@
 ﻿using EasyOffice.Attributes;
 using EasyOffice.Decorators;
 using EasyOffice.Filters;
+using EasyOffice.Models.Excel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace EasyOffice.Models.Excel
+namespace EasyOffice.Utils
 {
     public static class ExcelExtensionMethods
     {
@@ -133,23 +134,46 @@ namespace EasyOffice.Models.Excel
             return true;
         }
 
-        /// 直接反射
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="row"></param>
-        /// <returns></returns>
         public static T Convert<T>(this ExcelDataRow row)
         {
-            return Convert<T>(row, GetValue);
+            if (row == null) return default(T);
+
+            return row.ConvertByRefelection<T>();
         }
 
         public static IEnumerable<T> Convert<T>(this IEnumerable<ExcelDataRow> rows)
         {
+            if (rows == null) return null;
+
+            //if (rows.Count() < 20000)
+            //{
+            //    return rows.ConvertByRefelection<T>();
+            //}
+
+            return rows.ConvertByExpressionTree<T>();
+        }
+
+
+        private static IEnumerable<T> ConvertByReflectionAndDelegate<T>(this IEnumerable<ExcelDataRow> rows)
+        {
             List<T> list = new List<T>();
 
-            rows?.ToList().ForEach(r => list.Add(r.Convert<T>()));
+            var props = typeof(T).GetProperties();
+
+            rows?.ToList().ForEach(r =>
+            {
+                var item = r.ConvertByReflectionAndDelegate<T>(GetValue, props);
+                list.Add(item);
+            });
 
             return list;
+        }
+
+        private static T ConvertByReflectionAndDelegate<T>(this ExcelDataRow row)
+        {
+            var props = typeof(T).GetProperties();
+
+            return row.ConvertByReflectionAndDelegate<T>(GetValue, props);
         }
 
         /// <summary>
@@ -158,11 +182,17 @@ namespace EasyOffice.Models.Excel
         /// <typeparam name="T"></typeparam>
         /// <param name="row"></param>
         /// <returns></returns>
-        private static T Convert<T>(this ExcelDataRow row, Func<ExcelDataRow, Type, string, object> func)
+        private static T ConvertByReflectionAndDelegate<T>(this ExcelDataRow row, Func<ExcelDataRow, Type, string, object> func,IEnumerable<PropertyInfo> props = null)
         {
             Type t = typeof(T);
             object o = Activator.CreateInstance(t);
-            t.GetProperties().ToList().ForEach(p =>
+
+            if (props == null)
+            {
+                props = t.GetProperties();
+            }
+
+            props.ToList().ForEach(p =>
             {
                 if (p.IsDefined(typeof(ColNameAttribute)))
                 {
@@ -177,26 +207,48 @@ namespace EasyOffice.Models.Excel
             return (T)o;
         }
 
+        private static IEnumerable<T> ConvertByRefelection<T>(this IEnumerable<ExcelDataRow> rows)
+        {
+            var props = typeof(T).GetProperties();
+            List<T> result = new List<T>();
+            foreach (var row in rows)
+            {
+                result.Add(row.ConvertByRefelection<T>());
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// 利用反射将ExcelDataRow转换为制定类型，性能较差
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="row"></param>
         /// <returns></returns>
-        public static T ConvertByRefelection<T>(this ExcelDataRow row)
+        private static T ConvertByRefelection<T>(this ExcelDataRow row, IEnumerable<PropertyInfo> props = null)
         {
-            Type t = typeof(T);
-            object o = Activator.CreateInstance(t);
-            t.GetProperties().ToList().ForEach(p =>
+            if (props == null)
             {
+                props = typeof(T).GetProperties();
+            }
+
+            object o = Activator.CreateInstance(typeof(T));
+            props.ToList().ForEach(p =>
+            {
+                ExcelDataCol col = null;
+
                 if (p.IsDefined(typeof(ColNameAttribute)))
                 {
-                    ExcelDataCol col = row.DataCols.SingleOrDefault(c => c.ColName == p.GetCustomAttribute<ColNameAttribute>().ColName);
+                    col = row.DataCols.SingleOrDefault(c => c.ColName == p.GetCustomAttribute<ColNameAttribute>().ColName);
+                }
+                else
+                {
+                    col = row.DataCols.SingleOrDefault(c => c.ColName == p.Name);
+                }
 
-                    if (col != null)
-                    {
-                        p.SetValue(o, ExpressionMapper.ChangeType(col.ColValue, p.PropertyType));
-                    }
+                if (col != null)
+                {
+                    p.SetValue(o, ExpressionMapper.ChangeType(col.ColValue, p.PropertyType));
                 }
             });
 
@@ -209,7 +261,7 @@ namespace EasyOffice.Models.Excel
         /// <typeparam name="T"></typeparam>
         /// <param name="rows"></param>
         /// <returns></returns>
-        public static IEnumerable<T> FastConvert<T>(this IEnumerable<ExcelDataRow> rows)
+        private static IEnumerable<T> ConvertByExpressionTree<T>(this IEnumerable<ExcelDataRow> rows)
         {
             if (rows == null || rows.Count() <= 0)
             {
@@ -222,7 +274,7 @@ namespace EasyOffice.Models.Excel
 
             rows?.ToList().ForEach(r =>
                 {
-                    var item = ExpressionMapper.FastConvert<T>(r, func);
+                    var item = ExpressionMapper.FastConvert(r, func);
                     list.Add(item);
                 }
             );
@@ -238,7 +290,7 @@ namespace EasyOffice.Models.Excel
 
             var props = typeof(T).GetProperties().Where(x => x.CanWrite && x.CanRead);
 
-            Func<List<ExcelDataCol>, T> func = ExpressionMapper.GetLambda<T>(key, props);
+            Func<List<ExcelDataCol>, T> func = ExpressionMapper.GetFunc<T>(key, props);
 
             return func;
         }

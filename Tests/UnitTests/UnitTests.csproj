@@ -43,13 +43,13 @@
       <None Update="Resources\CarWordTemplate.docx">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Resources\Convert\table.docx">
+      <None Update="Resources\convert\table.docx">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Resources\Convert\text.docx">
+      <None Update="Resources\convert\text.docx">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Resources\Convert\textAndPicture.docx">
+      <None Update="Resources\convert\textAndPicture.docx">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="Resources\gn.jpg">

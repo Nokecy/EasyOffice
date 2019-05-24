@@ -4,7 +4,7 @@ using System.Text;
 
 namespace UnitTests.Models
 {
-    public class PerformanceTest
+    public class PerformanceTestDTO
     {
         public string p1 { get; set; }="test";
         public string p2 { get; set; }="test";

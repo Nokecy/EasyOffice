@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasyOffice.Models.Excel
+namespace EasyOffice.Utils
 {
     /// <summary>
     /// 生成表达式目录树 缓存
@@ -37,7 +37,7 @@ namespace EasyOffice.Models.Excel
             return func.Invoke(dataRow.DataCols);
         }
 
-        public static Func<List<ExcelDataCol>, T> GetLambda<T>(string key,IEnumerable<PropertyInfo> props)
+        public static Func<List<ExcelDataCol>, T> GetFunc<T>(string key, IEnumerable<PropertyInfo> props)
         {
             if (!Table.ContainsKey(key))
             {
@@ -59,14 +59,19 @@ namespace EasyOffice.Models.Excel
                     //lambda表达式： PropertyName=prop.Name
                     Expression<Func<ExcelDataCol, bool>> propertyEqualExpr = c => c.PropertyName == prop.Name;
 
+                    //调用ChangeType方法
                     MethodInfo changeTypeMethod = typeof(ExpressionMapper).GetMethods().Where(m => m.Name == "ChangeType").First();
 
+                    //firstOrDefault方法
                     var firstOrDefaultMethodExpr = Expression.Call(firstOrDefaultMethod, dataColsParam, propertyEqualExpr);
 
+                    //当前propertytype
                     var propTypeConst = Expression.Constant(prop.PropertyType);
 
+                    //得到DataCols.SingleOrDefault(c=>c.PropertyName == prop.Name).ColValue
                     var colValueExpr = Expression.Property(firstOrDefaultMethodExpr, typeof(ExcelDataCol), "ColValue");
 
+                    //changeType表达式
                     var changeTypeExpr = Expression.Call(changeTypeMethod, colValueExpr, propTypeConst);
 
                     Expression expr = Expression.Convert(changeTypeExpr, prop.PropertyType);
@@ -83,7 +88,7 @@ namespace EasyOffice.Models.Excel
                   dataColsParam
                 });
 
-                Func<List<ExcelDataCol>, T> func = lambda.Compile();//拼装是一次性的
+                Func<List<ExcelDataCol>, T> func = lambda.Compile();
                 Table[key] = func;
             }
 
