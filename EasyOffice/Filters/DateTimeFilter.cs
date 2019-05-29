@@ -13,7 +13,7 @@ namespace EasyOffice.Filters
     /// 日期过滤器
     /// </summary>
     [FilterBind(typeof(DateTimeAttribute))]
-    public class DateTimeFilter : IFilter
+    public class DateTimeFilter : BaseFilter, IFilter
     {
         public List<ExcelDataRow> Filter(List<ExcelDataRow> excelDataRows, FilterContext context, ImportOption importOption)
         {

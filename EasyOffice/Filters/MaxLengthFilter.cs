@@ -14,7 +14,7 @@ namespace EasyOffice.Filters
     /// 最大长度过滤器
     /// </summary>
     [FilterBind(typeof(MaxLengthAttribute))]
-    public class MaxLengthFilter : IFilter
+    public class MaxLengthFilter : BaseFilter,IFilter
     {
         public List<ExcelDataRow> Filter(List<ExcelDataRow> excelDataRows, FilterContext context, ImportOption importOption)
         {
@@ -35,5 +35,6 @@ namespace EasyOffice.Filters
 
             return excelDataRows;
         }
+        public int MaxLength { get; set; }
     }
 }

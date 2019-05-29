@@ -15,7 +15,7 @@ namespace EasyOffice.Filters
     /// 必填过滤器
     /// </summary>
     [FilterBind(typeof(RequiredAttribute))]
-    public class RequiredFilter : IFilter
+    public class RequiredFilter : BaseFilter,IFilter
     {
         public List<ExcelDataRow> Filter(List<ExcelDataRow> excelDataRows, FilterContext context, ImportOption importOption)
         {

@@ -15,7 +15,7 @@ namespace EasyOffice.Filters
     /// 数值范围过滤器
     /// </summary>
     [FilterBind(typeof(RangeAttribute))]
-    public class RangeFilter : IFilter
+    public class RangeFilter : BaseFilter, IFilter
     {
         public List<ExcelDataRow> Filter(List<ExcelDataRow> excelDataRows, FilterContext context, ImportOption importOption)
         {
@@ -36,5 +36,9 @@ namespace EasyOffice.Filters
 
             return excelDataRows;
         }
+
+        public int Min { get; set; }
+
+        public int Max { get; set; }
     }
 }

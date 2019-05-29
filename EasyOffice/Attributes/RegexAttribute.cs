@@ -12,10 +12,10 @@ namespace EasyOffice.Attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = false)]
     public class RegexAttribute : BaseFilterAttribute
     {
-        public string Regex { get; set; }
+        public string RegexString { get; set; }
         public RegexAttribute(string regex)
         {
-            Regex = regex;
+            RegexString = regex;
             ErrorMsg = "非法";
         }
     }

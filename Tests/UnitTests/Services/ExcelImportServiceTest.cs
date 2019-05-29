@@ -119,6 +119,13 @@ namespace UnitTests.Services
                 && dto.Age == 18);
         }
 
+        [Fact]
+        public void FluentApi测试()
+        {
+            Validator<ExcelCarTemplateDTO> v = new Validator<ExcelCarTemplateDTO>();
+            v.AddRule(x => x.Age).NotDuplicate();
+        }
+
         public void Dispose()
         {
             _rows = null;

@@ -15,7 +15,7 @@ namespace EasyOffice.Filters
     /// 正则表达式过滤器
     /// </summary>
     [FilterBind(typeof(RegexAttribute))]
-    public class RegexFilter : IFilter
+    public class RegexFilter : BaseFilter,IFilter
     {
         public List<ExcelDataRow> Filter(List<ExcelDataRow> excelDataRows, FilterContext context, ImportOption importOption)
         {
@@ -32,7 +32,7 @@ namespace EasyOffice.Filters
                     {
                         attrs.ForEach(a =>
                         {
-                            r.SetNotValid(Regex.IsMatch(c.ColValue, a.Regex), c, a.ErrorMsg);
+                            r.SetNotValid(Regex.IsMatch(c.ColValue, a.RegexString), c, a.ErrorMsg);
                         });
                     }
                 });
@@ -40,5 +40,7 @@ namespace EasyOffice.Filters
 
             return excelDataRows;
         }
+
+        public string RegexString { get; set; }
     }
 }

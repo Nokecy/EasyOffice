@@ -13,7 +13,7 @@ namespace EasyOffice.Filters
     /// 重复过滤器
     /// </summary>
     [FilterBind(typeof(DuplicationAttribute))]
-    public class ValidateDuplication : IFilter
+    public class DuplicateFilter : BaseFilter,IFilter
     {
         public List<ExcelDataRow> Filter(List<ExcelDataRow> excelDataRows, FilterContext context, ImportOption importOption)
         {
