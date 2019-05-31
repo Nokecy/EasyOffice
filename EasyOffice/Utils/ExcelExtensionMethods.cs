@@ -51,7 +51,7 @@ namespace EasyOffice.Utils
             var prop = export.GetType().GetProperties().Where(p => p.Name.Equals(propertyName)).SingleOrDefault();
             if (prop != null)
             {
-                strVal = prop.GetValue(export).ToString();
+                strVal = prop.GetValue(export) == null ? string.Empty : prop.GetValue(export).ToString();
             }
 
             return strVal;

@@ -41,7 +41,10 @@ namespace EasyOffice.Providers.NPOI
 
             SetHeader<T>(sheet, exportOption.HeaderRowIndex, headerDict);
 
-            SetDataRows(sheet, exportOption.DataRowStartIndex, exportOption.Data, headerDict);
+            if (exportOption.Data != null && exportOption.Data.Count > 0)
+            {
+                SetDataRows(sheet, exportOption.DataRowStartIndex, exportOption.Data, headerDict);
+            }
 
             return workbook?.ToBytes();
         }
