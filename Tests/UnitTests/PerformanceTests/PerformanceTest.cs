@@ -18,7 +18,7 @@ namespace UnitTests.Services
     {
         private readonly IExcelImportService _excelImportService;
         private readonly IExcelExportService _excelExportService;
-        private static readonly int rowsCount = 1000000;
+        private static readonly int rowsCount = 10;
         private static List<ExcelDataRow> _rows = new  List<ExcelDataRow>();
 
         private static List<PerformanceTestDTO> _datas=new List<PerformanceTestDTO>();
@@ -147,10 +147,7 @@ namespace UnitTests.Services
             string curDir = Environment.CurrentDirectory;
             string fileUrl = Path.Combine(curDir, DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx");
 
-            var bytes = await _excelExportService.ExportAsync(new ExportOption<PerformanceTestDTO>()
-            {
-                Data = _datas
-            });
+            var bytes = await _excelExportService.ExportAsync(_datas);
 
             File.WriteAllBytes(fileUrl, bytes);
         }
@@ -161,9 +158,8 @@ namespace UnitTests.Services
             string curDir = Environment.CurrentDirectory;
             string fileUrl = Path.Combine(curDir, DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx");
 
-            var bytes = await _excelExportService.ExportAsync(new ExportOption<PerformanceTestDTO>()
+            var bytes = await _excelExportService.ExportAsync(_datas,new ExportOption<PerformanceTestDTO>()
             {
-                Data = _datas,
                 ExportType = EasyOffice.Enums.ExportType.FastXLSX
             });
 
@@ -176,9 +172,8 @@ namespace UnitTests.Services
             string curDir = Environment.CurrentDirectory;
             string fileUrl = Path.Combine(curDir, DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv");
 
-            var bytes = await _excelExportService.ExportAsync(new ExportOption<PerformanceTestDTO>()
+            var bytes = await _excelExportService.ExportAsync(_datas, new ExportOption<PerformanceTestDTO>()
             {
-                Data = _datas,
                 ExportType = EasyOffice.Enums.ExportType.CSV
             });
 

@@ -19,9 +19,11 @@ namespace EasyOffice.Services
             _excelExportProvider = excelExportProvider;
         }
 
-        public Task<byte[]> ExportAsync<T>(ExportOption<T> exportOption)
+        public Task<byte[]> ExportAsync<T>(List<T> data,ExportOption<T> exportOption=null)
             where T : class, new()
         {
+            exportOption = exportOption ?? new ExportOption<T>();
+
             var provider = _excelExportProvider;
 
             switch (exportOption.ExportType)
@@ -51,7 +53,7 @@ namespace EasyOffice.Services
             //    throw new InvalidOperationException("xlsx格式文件最多支持1048575行数据");
             //}
 
-            var workbookBytes = provider.Export(exportOption);
+            var workbookBytes = provider.Export(data, exportOption);
 
             //设置样式
             workbookBytes = Decorate(workbookBytes, exportOption);

@@ -4,12 +4,12 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <Version>1.1.4</Version>
+        <Version>1.1.5</Version>
         <Description>a .net core library to easily manipulate excel,word etc.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/holdengong/EasyOffice</PackageProjectUrl>
         <RepositoryUrl>https://github.com/holdengong/EasyOffice</RepositoryUrl>
-        <PackageReleaseNotes>修改框架为netstandard2.0</PackageReleaseNotes>
+        <PackageReleaseNotes>修改导出接口定义</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>

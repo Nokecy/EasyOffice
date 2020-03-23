@@ -45,10 +45,7 @@ namespace UnitTests.Services
                 list.Add(carDTO);
             }
 
-            var bytes = await _excelExportService.ExportAsync<ExcelCarTemplateDTO>(new ExportOption<ExcelCarTemplateDTO>()
-            {
-                Data = list
-            });
+            var bytes = await _excelExportService.ExportAsync<ExcelCarTemplateDTO>(list);
             File.WriteAllBytes(fileUrl, bytes);
         }
 

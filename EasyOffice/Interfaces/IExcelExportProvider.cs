@@ -12,7 +12,7 @@ namespace EasyOffice.Interfaces
     /// </summary>
     public interface IExcelExportProvider
     {
-        byte[] Export<T>(ExportOption<T> exportOption)
+        byte[] Export<T>(List<T> data,ExportOption<T> exportOption)
             where T : class, new();
 
         byte[] DecorateHeader<T>(byte[] workbookBytes, ExportOption<T> exportOption, DecoratorContext context)

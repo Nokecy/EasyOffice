@@ -10,11 +10,6 @@ namespace EasyOffice.Models.Excel
         where T : class, new()
     {
         /// <summary>
-        /// 数据集合
-        /// </summary>
-        public List<T> Data { get; set; }
-
-        /// <summary>
         /// 导出Excel类型
         /// </summary>
         public ExportType ExportType { get; set; } = ExportType.XLSX;

@@ -17,13 +17,13 @@ namespace EasyOffice.Providers.NPOI
             throw new NotImplementedException();
         }
 
-        public byte[] Export<T>(ExportOption<T> exportOption) where T : class, new()
+        public byte[] Export<T>(List<T> data,ExportOption<T> exportOption) where T : class, new()
         {
             string url = Path.Combine(Environment.CurrentDirectory, DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".xlsx");
             using (var writer = new StreamWriter(url))
             using (var csv = new CsvWriter(writer))
             {
-                csv.WriteRecords(exportOption.Data);
+                csv.WriteRecords(data);
             }
 
             var bytes = File.ReadAllBytes(url);

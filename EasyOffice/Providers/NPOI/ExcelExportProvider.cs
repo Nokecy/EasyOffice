@@ -22,7 +22,7 @@ namespace EasyOffice.Providers.NPOI
 {
     public class ExcelExportProvider : IExcelExportProvider
     {
-        public byte[] Export<T>(ExportOption<T> exportOption)
+        public byte[] Export<T>(List<T> data,ExportOption<T> exportOption)
             where T : class, new()
         {
             IWorkbook workbook = null;
@@ -41,9 +41,9 @@ namespace EasyOffice.Providers.NPOI
 
             SetHeader<T>(sheet, exportOption.HeaderRowIndex, headerDict);
 
-            if (exportOption.Data != null && exportOption.Data.Count > 0)
+            if (data != null && data.Count > 0)
             {
-                SetDataRows(sheet, exportOption.DataRowStartIndex, exportOption.Data, headerDict);
+                SetDataRows(sheet, exportOption.DataRowStartIndex, data, headerDict);
             }
 
             return workbook?.ToBytes();

@@ -22,7 +22,7 @@ namespace EasyOffice.Providers.NPOI
             throw new NotImplementedException();
         }
 
-        public byte[] Export<T>(ExportOption<T> exportOption) where T : class, new()
+        public byte[] Export<T>(List<T> data,ExportOption<T> exportOption) where T : class, new()
         {
             //var dt = ToDataTable(exportOption.Data);
             //DataSet ds = new DataSet();
@@ -31,7 +31,7 @@ namespace EasyOffice.Providers.NPOI
 
             var headerDict = ExportMappingDictFactory.CreateInstance(typeof(T));
 
-            return Export(exportOption.Data, headerDict);
+            return Export(data, headerDict);
         }
 
         public byte[] MergeCols<T>(byte[] workbookBytes, ExportOption<T> exportOption, DecoratorContext context) where T : class, new()

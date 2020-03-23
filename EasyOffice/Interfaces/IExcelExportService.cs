@@ -11,7 +11,7 @@ namespace EasyOffice.Interfaces
     /// </summary>
     public interface IExcelExportService
     {
-        Task<byte[]> ExportAsync<T>(ExportOption<T> exportOption)
+        Task<byte[]> ExportAsync<T>(List<T> data,ExportOption<T> exportOption = null)
             where T : class, new();
     }
 }
