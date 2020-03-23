@@ -30,19 +30,21 @@ namespace EasyOffice.Factories
             Dictionary<string, string> dict = new Dictionary<string, string>();
             exportType.GetProperties().ToList().ForEach(p =>
             {
-                if (p.IsDefined(typeof(ColNameAttribute)))
+                if (!p.IsDefined(typeof(EasyIgnoreAttribute)))
                 {
-                    dict.Add(p.Name, p.GetCustomAttribute<ColNameAttribute>().ColName);
-                }
-                else
-                {
-                    dict.Add(p.Name, p.Name);
+                    if (p.IsDefined(typeof(ColNameAttribute)))
+                    {
+                        dict.Add(p.Name, p.GetCustomAttribute<ColNameAttribute>().ColName);
+                    }
+                    else
+                    {
+                        dict.Add(p.Name, p.Name);
+                    }
                 }
             });
 
             Table[key] = dict;
             return dict;
         }
-
     }
 }
